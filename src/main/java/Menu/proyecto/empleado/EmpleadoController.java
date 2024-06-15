@@ -1,9 +1,8 @@
 package Menu.proyecto.empleado;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,39 +13,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
+@RequestMapping("/empleados")
+@CrossOrigin("*")
 public class EmpleadoController 
 {
     @Autowired
     private EmpleadoService empleadoService;
 
-    @PostMapping(value = "empleado")
+    @PostMapping("/crear")
     public Empleado save(@RequestBody Empleado entity) 
     {
         return empleadoService.save(entity);
     }
     
-    @GetMapping(value = "empleado/{id}")
+    @GetMapping("/obtener/{id}")
     public Empleado findById(@PathVariable Long id) 
     {
         return empleadoService.findById(id);
     }
 
-    @PutMapping(value = "empleado")
+    @PutMapping("/actualizar")
     public Empleado update(@RequestBody Empleado entity)
     {
         return empleadoService.save(entity);
     }
 
     //Delete
-    @DeleteMapping(value = "empleado/{id}")
+    @DeleteMapping("/borrar/{id}")
     public void delete(@PathVariable Long id)
     {
         empleadoService.deleteById(id);
     }
 
     //ALl
-    @GetMapping(value = "empleado")
+    @GetMapping("/listar")
     public List<Empleado> findAll()
     {
         return empleadoService.findAll();

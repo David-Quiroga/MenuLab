@@ -4,13 +4,17 @@ package Menu.proyecto.reserva;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+
+
 import Menu.proyecto.cliente.Cliente;
 import Menu.proyecto.restaurante.Restaurante;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 
 @Entity
 public class Reserva 
@@ -19,9 +23,17 @@ public class Reserva
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Date fechaingreso;
-    private BigDecimal precio;
-    private BigDecimal numeropersonas;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurante_id")
+    private Restaurante restaurante;
+    private Date  fechaHora;
+    private Double  total;
+    private Double numeropersonas;
     private String descripcion;
 
     public long getId() {
@@ -32,27 +44,27 @@ public class Reserva
         this.id = id;
     }
 
-    public Date getFechaingreso() {
-        return fechaingreso;
+    public Date  getFechaHora() {
+        return fechaHora;
     }
 
-    public void setFechaingreso(Date fechaingreso) {
-        this.fechaingreso = fechaingreso;
+    public void setFechaHora(Date  fechaHora) {
+        this.fechaHora = fechaHora;
     }
 
-    public BigDecimal getPrecio() {
-        return precio;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
-    public BigDecimal getNumeropersonas() {
+    public Double getNumeropersonas() {
         return numeropersonas;
     }
 
-    public void setNumeropersonas(BigDecimal numeropersonas) {
+    public void setNumeropersonas(Double numeropersonas) {
         this.numeropersonas = numeropersonas;
     }
 
@@ -80,12 +92,10 @@ public class Reserva
         this.cliente = cliente;
     }
 
-    @ManyToOne 
-    private Restaurante restaurante;
+    
 
     // @ManyToOne 
     // private Restaurante Crearplato;
 
-    @ManyToOne
-    private Cliente cliente;
+ 
 }

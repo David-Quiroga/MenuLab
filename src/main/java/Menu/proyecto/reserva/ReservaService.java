@@ -44,9 +44,9 @@ public class ReservaService
             }
 
             if(reservaActualizada.getDescripcion()!= null)reservaExistente.setDescripcion(reservaActualizada.getDescripcion());
-            if(reservaActualizada.getFechaingreso()!= null)reservaActualizada.setFechaingreso(reservaActualizada.getFechaingreso());
+            if(reservaActualizada.getFechaHora()!= null)reservaActualizada.setFechaHora(reservaActualizada.getFechaHora());
             if(reservaActualizada.getNumeropersonas()!= null)reservaActualizada.setNumeropersonas(reservaActualizada.getNumeropersonas());
-            if(reservaActualizada.getPrecio()!= null)reservaActualizada.setPrecio(reservaActualizada.getPrecio());
+            if(reservaActualizada.getTotal()!= null)reservaActualizada.setTotal(reservaActualizada.getTotal());
 
 
             Reserva reservaGuardada = save(reservaExistente);

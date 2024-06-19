@@ -10,8 +10,8 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Cliente save(Cliente entity) {
-        return clienteRepository.save(entity);
+    public Cliente save(Cliente cliente) {
+        return clienteRepository.save(cliente);
     }
 
     public Cliente findById(Long id) {

@@ -12,6 +12,8 @@ public class Cliente {
     private String nombre;
     private String correo;
     private String cedula;
+    private String telefono;
+
     //private String contraseña;
     // private String rol;
 
@@ -23,6 +25,13 @@ public class Cliente {
         this.cedula = cedula;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
     public String getCorreo() {
         return correo;
     }

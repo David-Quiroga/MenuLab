@@ -3,6 +3,7 @@ package Menu.proyecto.cliente;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +23,8 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/registro")
-    public Cliente save(@RequestBody Cliente entity) {
-        return clienteService.save(entity);
+    public ResponseEntity<Cliente> crearCliente(@RequestBody Cliente cliente) {
+        return new ResponseEntity<>(clienteService.save(cliente), HttpStatus.CREATED);
     }
 
     @GetMapping("/obtener/{id}")
@@ -37,10 +38,15 @@ public class ClienteController {
         clienteService.deleteById(id);
     }
 
-    // ALl
-    @GetMapping("/listar")
-    public List<Cliente> findAll() {
-        return clienteService.findAll();
+    // // ALl
+    // @GetMapping("/listar")
+    // public List<Cliente> findAll() {
+    //     return clienteService.findAll();
+    // }
+
+    @GetMapping
+    public ResponseEntity<List<Cliente>> getAllCLientes() {
+        return new ResponseEntity<>(clienteService.findAll(), HttpStatus.OK);
     }
 
     @PutMapping("/actualizar/{id}")

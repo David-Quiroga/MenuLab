@@ -12,17 +12,17 @@ import jakarta.persistence.ManyToOne;
 public class Restaurante {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long idrestaurante;
+    private Long idrestaurante;
     private String nombrerestaurante;
     private String direccion;
     private String telefono;
 
 
-    public long getIdrestaurante() {
+    public Long getIdrestaurante() {
         return idrestaurante;
     }
 
-    public void setIdrestaurante(long idrestaurante) {
+    public void setIdrestaurante(Long idrestaurante) {
         this.idrestaurante = idrestaurante;
     }
 

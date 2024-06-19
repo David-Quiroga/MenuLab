@@ -9,10 +9,32 @@ import jakarta.persistence.Id;
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
     private String nombre;
     private String descripcion;
     private Double precio;
+
+    // Constructores (generalmente no necesitan getters y setters explícitos)
+
+    public MenuItem() {
+    }
+
+    public MenuItem(String nombre, String descripcion, Double precio) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public String getNombre() {
         return nombre;

@@ -2,7 +2,9 @@ package Menu.proyecto.cart;
 
 import Menu.proyecto.menu.MenuItem;
 import Menu.proyecto.reservation.Reservation;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,13 +17,15 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
+    
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_item_id")
     private MenuItem menuItem;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 
     private Integer quantity;
 

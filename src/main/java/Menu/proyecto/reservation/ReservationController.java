@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +16,11 @@ import Menu.proyecto.cart.CartItem;
 import Menu.proyecto.cart.CartItemService;
 import Menu.proyecto.cliente.Cliente;
 import Menu.proyecto.cliente.ClienteService;
+import Menu.proyecto.menu.MenuItemRepository;
 import Menu.proyecto.reservation.Reservation;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api")
 public class ReservationController {
     @Autowired
     private ReservationService reservationService;
@@ -29,31 +31,26 @@ public class ReservationController {
     @Autowired
     private CartItemService cartItemService;
 
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+
     @GetMapping
     public ResponseEntity<List<Reservation>> getAllReservations() {
         return ResponseEntity.ok(reservationService.getAllReservations());
     }
 
-    @PostMapping
+    @PostMapping("/reservations")
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        // Save customer if not already saved
-        Cliente cliente = reservation.getCliente();
-        if (cliente.getId() == 0) {
-            cliente = clienteService.save(cliente);
-        }
-        reservation.setCliente(cliente);
-        reservation.setReservedAt(LocalDateTime.now());
-        reservation.setStatus("Pending");
-
-        // Save reservation
-        Reservation savedReservation = reservationService.saveReservation(reservation);
-
-        // Save cart items
+        // Guarda cada MenuItem antes de guardar CartItem
         for (CartItem cartItem : reservation.getCartItems()) {
-            cartItem.setReservation(savedReservation);
-            cartItemService.saveCartItem(cartItem);
+            if (cartItem.getMenuItem() != null) {
+                menuItemRepository.save(cartItem.getMenuItem());
+            }
         }
 
-        return ResponseEntity.ok(savedReservation);
+        // Guarda la reserva
+        reservationService.saveReservation(reservation);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
     }
-}
+} 

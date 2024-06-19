@@ -1,6 +1,7 @@
 package Menu.proyecto.reservation;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import Menu.proyecto.cart.CartItem;
@@ -20,23 +21,23 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     private LocalDateTime reservedAt;
     private String status;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
 
     // Getters and setters
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

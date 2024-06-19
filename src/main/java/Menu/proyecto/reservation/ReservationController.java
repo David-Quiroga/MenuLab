@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,37 +22,52 @@ import Menu.proyecto.menu.MenuItemRepository;
 import Menu.proyecto.reservation.Reservation;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/reservations")
+@CrossOrigin({"*"})
 public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
     @Autowired
-    private ClienteService clienteService;
-
-    @Autowired
-    private CartItemService cartItemService;
-
-    @Autowired
     private MenuItemRepository menuItemRepository;
 
+    // @GetMapping
+    // public ResponseEntity<List<Reservation>> getAllReservations() {
+    //     return ResponseEntity.ok(reservationService.getAllReservations());
+    // }
+
     @GetMapping
-    public ResponseEntity<List<Reservation>> getAllReservations() {
-        return ResponseEntity.ok(reservationService.getAllReservations());
+    public List<Reservation> getAllReservations() {
+        List<Reservation> reservations = reservationService.getAllReservations();
+        // Puedes verificar si las relaciones están inicializadas antes de devolverlas
+        // Hibernate.initialize(reservations); // Si es necesario inicializar manualmente
+        return reservations;
     }
 
-    @PostMapping("/reservations")
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        // Guarda cada MenuItem antes de guardar CartItem
-        for (CartItem cartItem : reservation.getCartItems()) {
-            if (cartItem.getMenuItem() != null) {
-                menuItemRepository.save(cartItem.getMenuItem());
-            }
+    @GetMapping("/{reservationId}")
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Long reservationId) {
+        Reservation reservation = reservationService.getReservationById(reservationId);
+        // Asegúrate de que las relaciones estén inicializadas antes de devolver la respuesta
+        if (reservation == null) {
+            return ResponseEntity.notFound().build();
         }
+        // Hibernate.initialize(reservation.getCartItems());  // Si es necesario inicializar manualmente
+        return ResponseEntity.ok(reservation);
+    }
 
-        // Guarda la reserva
-        reservationService.saveReservation(reservation);
+    // Endpoint para crear una nueva Reservation
+    @PostMapping
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+        Reservation createdReservation = reservationService.saveReservation(reservation);
+        return ResponseEntity.ok(createdReservation);
+    }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
+    // Endpoint para añadir un CartItem a una Reservation existente
+    @PostMapping("/{reservationId}/cartitems")
+    public ResponseEntity<CartItem> addCartItemToReservation(
+            @PathVariable Long reservationId,
+            @RequestBody CartItem cartItem) {
+        CartItem addedCartItem = reservationService.addCartItemToReservation(reservationId, cartItem);
+        return ResponseEntity.ok(addedCartItem);
     }
 } 

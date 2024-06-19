@@ -38,11 +38,11 @@ public class ClienteController {
         clienteService.deleteById(id);
     }
 
-    // // ALl
-    // @GetMapping("/listar")
-    // public List<Cliente> findAll() {
-    //     return clienteService.findAll();
-    // }
+    // ALl
+    @GetMapping("/listar")
+    public List<Cliente> findAll() {
+        return clienteService.findAll();
+    }
 
     @GetMapping
     public ResponseEntity<List<Cliente>> getAllCLientes() {
